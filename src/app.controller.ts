@@ -6,7 +6,16 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello(): Promise<string> {
+    const data = await this.appService.getSimpleData();
+
+    return `
+      Chain: ${data.chain}<br/>
+      Node name: ${data.nodeName}<br/>
+      Node version: ${data.nodeVersion}<br/>
+      Number of latest block: ${data.headerNumber}<br/>
+      Now: ${new Date(Number(data.now.toString())).toISOString()}<br />
+      Balance: ${data.balance}
+    `;
   }
 }
